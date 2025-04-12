@@ -1,0 +1,11 @@
+.pos {
+  position: absolute;
+
+  width: 34px;
+  height: 34px;
+  border-radius: 0 10px 0 10px;
+  background-image: url(/mouse-1.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-color: transparent;
+}

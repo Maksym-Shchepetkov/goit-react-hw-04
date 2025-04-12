@@ -1,11 +1,11 @@
 html,
-body {
-  cursor: url('/mouse.svg'), auto;
-}
-
-body {
+body,
+*,
+#root {
   font-family: 'Courier New', Courier, monospace;
   color: #000000;
+
+  cursor: none;
 }
 
 h1,
@@ -31,6 +31,8 @@ ol {
 
 input {
   outline: none;
+
+  cursor: url('/search.png') 10 10, pointer;
 }
 
 button {
