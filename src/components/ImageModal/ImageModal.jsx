@@ -21,7 +21,7 @@ const ImageModal = ({ photo, closeModal }) => {
     return () => {
       document.removeEventListener('keydown', escCloseModal);
     };
-  }, []);
+  }, [closeModal]);
 
   return (
     <div className={s.backdrop} onClick={handleCloseModal}>

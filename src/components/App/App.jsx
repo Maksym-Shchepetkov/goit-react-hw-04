@@ -53,12 +53,9 @@ const App = () => {
     setModalImg('');
     setIsModal(false);
   };
-  // const chosen = photos.filter(image => image.index);
-  // setIsModal(true);
-  // return setPhotos(chosen);
 
   return (
-    <div>
+    <div className={s.wrapper}>
       <SearchBar
         open={isOpen}
         setOpen={setIsOpen}
@@ -82,20 +79,13 @@ const App = () => {
       <ImageGallery
         openGallery={isOpen}
         collection={photos}
-        modalImgValue={modalImg}
-        modalValue={isModal}
         openModal={handleOpenModal}
-        closeModal={handleCloseModal}
-        desc={desc}
-        setDesc={setDesc}
-        link={link}
-        setLink={setLink}
       />
       {isloading && <Loader />}
       {page < totalPages && !isloading && (
         <LoadMoreBtn page={page} setPage={setPage} />
       )}
-      {/* {isModal && <ImageModal photo={modalImg} closeModal={handleCloseModal} />} */}
+      {isModal && <ImageModal photo={modalImg} closeModal={handleCloseModal} />}
     </div>
   );
 };

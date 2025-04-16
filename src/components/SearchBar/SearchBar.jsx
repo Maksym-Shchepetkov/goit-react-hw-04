@@ -99,9 +99,10 @@ const SearchBar = ({
         onAnimationEnd={handleInputOn}
       >
         {input === true && (
-          <form onSubmit={handleFormSubmit} className={s.headerForm}>
+          <form id="test" onSubmit={handleFormSubmit} className={s.headerForm}>
             <input
               type="text"
+              id="testInput"
               name="search"
               value={search.search}
               onChange={handleChange}
@@ -111,7 +112,7 @@ const SearchBar = ({
               className={s.headerInput}
             />
 
-            <button type="submit" className={s.headerBtn}>
+            <button name="button" type="submit" className={s.headerBtn}>
               <FaMagnifyingGlass className={message ? s.red : s.headerIcon} />
             </button>
 

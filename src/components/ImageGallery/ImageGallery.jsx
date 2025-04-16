@@ -2,18 +2,7 @@ import s from './ImageGallery.module.css';
 import ImageCard from '../ImageCard/ImageCard';
 import ImageModal from '../ImageModal/ImageModal.jsx';
 
-const ImageGallery = ({
-  openGallery,
-  collection,
-  openModal,
-  closeModal,
-  modalImgValue,
-  modalValue,
-  desc,
-  setDesc,
-  link,
-  setLink,
-}) => {
+const ImageGallery = ({ openGallery, collection, openModal }) => {
   return (
     <>
       {openGallery && (
@@ -34,9 +23,6 @@ const ImageGallery = ({
               </li>
             );
           })}
-          {modalValue && (
-            <ImageModal photo={modalImgValue} closeModal={closeModal} />
-          )}
         </ul>
       )}
     </>
