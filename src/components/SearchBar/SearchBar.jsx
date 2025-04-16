@@ -1,71 +1,126 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import s from './SearchBar.module.css';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
+import toast, { Toaster } from 'react-hot-toast';
+import LoadMoreBtn from '../LoadMoreBtn/LoadMoreBtn';
 
-const SearchBar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isClose, setIsClose] = useState(true);
-  const [isInput, setIsInput] = useState(false);
-  const [animation, setAnimation] = useState(false);
-
+const SearchBar = ({
+  open,
+  setOpen,
+  close,
+  setClose,
+  input,
+  setInput,
+  anim,
+  setAnim,
+  search,
+  setSearch,
+  message,
+  setMessage,
+  queryValue,
+  updatePhotos,
+  updatePage,
+  total,
+}) => {
   const handleToggleBoxBtn = () => {
-    setIsClose(false);
-    setAnimation(true);
+    setClose(false);
+    setAnim(true);
   };
 
   const handleAnimationOff = () => {
-    setAnimation(false);
-    setIsOpen(true);
+    setAnim(false);
+    setOpen(true);
   };
 
   const handleInputOn = () => {
-    setIsInput(true);
+    setInput(true);
   };
 
   const handleResetSerchBox = () => {
-    setIsOpen(false);
-    setIsClose(true);
-    setIsInput(false);
-    setAnimation(false);
+    setOpen(false);
+    setClose(true);
+    setInput(false);
+    setAnim(false);
+    updatePhotos([]);
+    updatePage(1);
+    total(0);
+  };
+
+  const handleChange = e => {
+    setSearch({ ...search, [e.target.name]: e.target.value });
+  };
+
+  const handleFormSubmit = e => {
+    e.preventDefault();
+    if (search.search.trim() === '') {
+      setMessage(
+        toast.error(
+          'Please fill search field',
+
+          {
+            duration: 4000,
+            position: 'top-right',
+          }
+        )
+      );
+      return;
+    }
+
+    queryValue(search.search);
+    updatePhotos([]);
+    updatePage(1);
+
+    return setSearch({ search: '' });
   };
 
   useEffect(() => {
-    const handleFormSubmit = e => {
-      e.preventDefault();
-      e.target.reset();
-    };
-  }, []);
+    if (message) {
+      const timer = setTimeout(() => setMessage(''), 4000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
 
   return (
     <header className={s.header}>
+      <Toaster />
       <div
-        className={animation ? s.boom : s.isClick}
+        className={anim ? s.boom : s.isClick}
         onAnimationEnd={handleAnimationOff}
       ></div>
       <button
         onClick={handleToggleBoxBtn}
-        className={isClose === true ? s.openBtn : s.isClick}
+        className={close === true ? s.openBtn : s.isClick}
       >
         Let's Start
       </button>
       <div
-        className={isOpen === true ? s.container : s.isClick}
+        className={open === true ? s.container : s.isClick}
         onAnimationEnd={handleInputOn}
       >
-        {isInput === true && (
-          <form onChange={() => handleFormSubmit()} className={s.headerForm}>
-            <button onClick={handleResetSerchBox} className={s.back}>
-              Back to Future
-            </button>
+        {input === true && (
+          <form onSubmit={handleFormSubmit} className={s.headerForm}>
             <input
               type="text"
+              name="search"
+              value={search.search}
+              onChange={handleChange}
               autoComplete="off"
               autoFocus
               placeholder="Search images and photos"
               className={s.headerInput}
             />
+
             <button type="submit" className={s.headerBtn}>
-              {<FaMagnifyingGlass className={s.headerIcon} />}
+              <FaMagnifyingGlass className={message ? s.red : s.headerIcon} />
+            </button>
+
+            <button
+              type="button"
+              onClick={handleResetSerchBox}
+              className={s.back}
+            >
+              Back to Start
             </button>
           </form>
         )}

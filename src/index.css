@@ -25,6 +25,7 @@ a {
 ul,
 ol {
   list-style-type: none;
+  margin: 0;
 }
 
 input {
@@ -40,4 +41,8 @@ button {
 
 img {
   display: block;
+}
+
+#text {
+  display: none;
 }
