@@ -5,8 +5,6 @@ import Modal from 'react-modal';
 Modal.setAppElement('#root');
 
 const ImageModal = ({ isOpen, image, closeModal }) => {
-  console.log(image);
-
   if (image.length === 0) {
     return;
   }
