@@ -70,8 +70,6 @@ const App = () => {
       <SearchBar
         search={searchingValue}
         setSearch={setSearchingValue}
-        message={error}
-        setMessage={setError}
         onSubmit={handleOnSubmit}
         updatePhotos={setPhotos}
         updatePage={setPage}
