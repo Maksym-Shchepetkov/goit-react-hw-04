@@ -76,6 +76,7 @@ const SearchBar = ({
 
   return (
     <header className={s.header}>
+      <Toaster />
       <div
         className={animation ? s.boom : s.isClick}
         onAnimationEnd={handleAnimationOff}
