@@ -7,8 +7,6 @@ import toast, { Toaster } from 'react-hot-toast';
 const SearchBar = ({
   search,
   setSearch,
-  message,
-  setMessage,
   updatePhotos,
   updatePage,
   total,
@@ -18,6 +16,7 @@ const SearchBar = ({
   const [isClose, setIsClose] = useState(true);
   const [isInput, setIsInput] = useState(false);
   const [animation, setAnimation] = useState(false);
+  const [error, setError] = useState('');
 
   const handleToggleBoxBtn = () => {
     setIsClose(false);
@@ -50,7 +49,7 @@ const SearchBar = ({
   const handleFormSubmit = e => {
     e.preventDefault();
     if (search.search.trim() === '') {
-      setMessage(
+      setError(
         toast.error(
           'Please fill search field',
 
@@ -68,12 +67,12 @@ const SearchBar = ({
   };
 
   useEffect(() => {
-    if (message) {
-      const timer = setTimeout(() => setMessage(''), 4000);
+    if (error) {
+      const timer = setTimeout(() => setError(''), 4000);
 
       return () => clearTimeout(timer);
     }
-  }, [message]);
+  }, [error]);
 
   return (
     <header className={s.header}>
@@ -106,7 +105,7 @@ const SearchBar = ({
             />
 
             <button name="button" type="submit" className={s.headerBtn}>
-              <FaMagnifyingGlass className={message ? s.red : s.headerIcon} />
+              <FaMagnifyingGlass className={error ? s.red : s.headerIcon} />
             </button>
 
             <button

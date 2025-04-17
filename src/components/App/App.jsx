@@ -10,7 +10,6 @@ import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 const App = () => {
   const [searchingValue, setSearchingValue] = useState({ search: '' });
-  const [error, setError] = useState('');
   const [query, setQuery] = useState('');
   const [photos, setPhotos] = useState([]);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
@@ -19,9 +18,7 @@ const App = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [modalImg, setModalImg] = useState('');
-  const [isModal, setIsModal] = useState(false);
   const [wrong, setWrong] = useState(false);
-  console.log(modalImg);
 
   useEffect(() => {
     const handleFetchPhotos = async () => {
@@ -58,12 +55,10 @@ const App = () => {
 
   const handleOpenModal = src => {
     setModalImg(src);
-    setIsModal(true);
   };
 
   const handleCloseModal = () => {
     setModalImg('');
-    setIsModal(false);
   };
 
   const handleLoadMoreClick = () => {
