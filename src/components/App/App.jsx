@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import handleGetPhotos from '../services/api';
 import s from './App.module.css';
 import SearchBar from '../SearchBar/SearchBar';
@@ -9,40 +9,52 @@ import ImageModal from '../ImageModal/ImageModal';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 const App = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isClose, setIsClose] = useState(true);
-  const [isInput, setIsInput] = useState(false);
-  const [animation, setAnimation] = useState(false);
   const [searchingValue, setSearchingValue] = useState({ search: '' });
   const [error, setError] = useState('');
   const [query, setQuery] = useState('');
   const [photos, setPhotos] = useState([]);
-  const [isloading, setIsLoading] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [modalImg, setModalImg] = useState('');
   const [isModal, setIsModal] = useState(false);
   const [wrong, setWrong] = useState(false);
-  const [desc, setDesc] = useState('');
-  const [link, setLink] = useState('');
+  console.log(modalImg);
 
   useEffect(() => {
     const handleFetchPhotos = async () => {
       try {
-        setIsLoading(true);
+        if (isInitialLoading) {
+          setIsLoading(true);
+        } else {
+          setIsLoadingMore(true);
+        }
+
         const data = await handleGetPhotos(query, page);
         setPhotos(prev => [...prev, ...data.results]);
         setTotalPages(data.total_pages);
       } catch (error) {
-        setWrong(true);
+        setWrong(error.message);
       } finally {
         setIsLoading(false);
+        setIsLoadingMore(false);
+        setIsInitialLoading(false);
       }
     };
+
     if (query.length) {
       handleFetchPhotos();
+      setIsInitialLoading(true);
     }
   }, [query, page]);
+
+  const handleOnSubmit = search => {
+    setQuery(search);
+    setPhotos([]);
+    setPage(1);
+  };
 
   const handleOpenModal = src => {
     setModalImg(src);
@@ -54,38 +66,36 @@ const App = () => {
     setIsModal(false);
   };
 
+  const handleLoadMoreClick = () => {
+    setPage(page + 1);
+  };
+
   return (
     <div className={s.wrapper}>
       <SearchBar
-        open={isOpen}
-        setOpen={setIsOpen}
-        close={isClose}
-        setClose={setIsClose}
-        input={isInput}
-        setInput={setIsInput}
-        anim={animation}
-        setAnim={setAnimation}
         search={searchingValue}
         setSearch={setSearchingValue}
         message={error}
         setMessage={setError}
-        queryValue={setQuery}
+        onSubmit={handleOnSubmit}
         updatePhotos={setPhotos}
         updatePage={setPage}
         total={setTotalPages}
       />
-      {wrong && <ErrorMessage />}
-      {isloading && <Loader />}
-      <ImageGallery
-        openGallery={isOpen}
-        collection={photos}
-        openModal={handleOpenModal}
-      />
-      {isloading && <Loader />}
-      {page < totalPages && !isloading && (
-        <LoadMoreBtn page={page} setPage={setPage} />
+      {isLoading && <Loader />}
+      {photos.length > 0 && (
+        <ImageGallery collection={photos} openModal={handleOpenModal} />
       )}
-      {isModal && <ImageModal photo={modalImg} closeModal={handleCloseModal} />}
+      {isLoadingMore && <Loader />}
+      {page < totalPages && !isLoading && (
+        <LoadMoreBtn nextPage={handleLoadMoreClick} />
+      )}
+      {wrong && <ErrorMessage errorText={wrong} />}
+      <ImageModal
+        isOpen={!!modalImg}
+        image={modalImg}
+        closeModal={handleCloseModal}
+      />
     </div>
   );
 };

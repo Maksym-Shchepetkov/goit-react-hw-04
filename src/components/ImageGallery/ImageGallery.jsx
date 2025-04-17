@@ -1,30 +1,27 @@
 import s from './ImageGallery.module.css';
 import ImageCard from '../ImageCard/ImageCard';
-import ImageModal from '../ImageModal/ImageModal.jsx';
 
-const ImageGallery = ({ openGallery, collection, openModal }) => {
+const ImageGallery = ({ collection, openModal }) => {
   return (
     <>
-      {openGallery && (
-        <ul className={s.container}>
-          {collection.map(image => {
-            return (
-              <li
-                key={image.id}
-                className={s.wrap}
-                onClick={() => openModal(image)}
-              >
-                <ImageCard
-                  dataImage={image.urls.small}
-                  dataAlt={image.alt_description}
-                  dataName={image.user.name}
-                  dataLikes={image.likes}
-                />
-              </li>
-            );
-          })}
-        </ul>
-      )}
+      <ul className={s.container}>
+        {collection.map(image => {
+          return (
+            <li
+              key={image.id}
+              className={s.wrap}
+              onClick={() => openModal(image)}
+            >
+              <ImageCard
+                dataImage={image.urls.small}
+                dataAlt={image.alt_description}
+                dataName={image.user.name}
+                dataLikes={image.likes}
+              />
+            </li>
+          );
+        })}
+      </ul>
     </>
   );
 };

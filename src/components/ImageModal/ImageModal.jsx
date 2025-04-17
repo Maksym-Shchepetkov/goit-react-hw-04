@@ -1,42 +1,30 @@
 import s from './ImageModal.module.css';
 import download from '../../assets/downoad.jpg';
-import { useEffect } from 'react';
+import Modal from 'react-modal';
 
-const ImageModal = ({ photo, closeModal }) => {
-  const handleCloseModal = e => {
-    if (e.target === e.currentTarget) {
-      return closeModal();
-    }
-  };
+Modal.setAppElement('#root');
 
-  useEffect(() => {
-    const escCloseModal = e => {
-      if (e.key === 'Escape') {
-        return closeModal();
-      }
-    };
+const ImageModal = ({ isOpen, image, closeModal }) => {
+  console.log(image);
 
-    document.addEventListener('keydown', escCloseModal);
-
-    return () => {
-      document.removeEventListener('keydown', escCloseModal);
-    };
-  }, [closeModal]);
-
+  if (image.length === 0) {
+    return;
+  }
   return (
-    <div className={s.backdrop} onClick={handleCloseModal}>
-      <div className={s.modal}>
-        <p className={s.par}>{photo.alt_description}</p>
-        <a
-          href={photo.links.download_location}
-          className={s.link}
-          target="_blank"
-        >
-          <img src={download} alt="download" className={s.linkMessage} />
-        </a>
-        <img src={photo.urls.regular} alt="test" className={s.reg} />
-      </div>
-    </div>
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={closeModal}
+      shouldCloseOnOverlayClick={true}
+      shouldCloseOnEsc={true}
+      className={s.modal}
+      overlayClassName={s.backdrop}
+    >
+      <p className={s.par}>{image.alt_description}</p>
+      <a href={image.links.download} className={s.link}>
+        <img src={download} alt="download" className={s.linkMessage} />
+      </a>
+      <img src={image.urls.regular} alt="" className={s.reg} />
+    </Modal>
   );
 };
 

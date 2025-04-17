@@ -1,46 +1,43 @@
 import { useEffect } from 'react';
 import s from './SearchBar.module.css';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
+import { useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
-import LoadMoreBtn from '../LoadMoreBtn/LoadMoreBtn';
 
 const SearchBar = ({
-  open,
-  setOpen,
-  close,
-  setClose,
-  input,
-  setInput,
-  anim,
-  setAnim,
   search,
   setSearch,
   message,
   setMessage,
-  queryValue,
   updatePhotos,
   updatePage,
   total,
+  onSubmit,
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isClose, setIsClose] = useState(true);
+  const [isInput, setIsInput] = useState(false);
+  const [animation, setAnimation] = useState(false);
+
   const handleToggleBoxBtn = () => {
-    setClose(false);
-    setAnim(true);
+    setIsClose(false);
+    setAnimation(true);
   };
 
   const handleAnimationOff = () => {
-    setAnim(false);
-    setOpen(true);
+    setAnimation(false);
+    setIsOpen(true);
   };
 
   const handleInputOn = () => {
-    setInput(true);
+    setIsInput(true);
   };
 
   const handleResetSerchBox = () => {
-    setOpen(false);
-    setClose(true);
-    setInput(false);
-    setAnim(false);
+    setIsOpen(false);
+    setIsClose(true);
+    setIsInput(false);
+    setAnimation(false);
     updatePhotos([]);
     updatePage(1);
     total(0);
@@ -65,10 +62,7 @@ const SearchBar = ({
       );
       return;
     }
-
-    queryValue(search.search);
-    updatePhotos([]);
-    updatePage(1);
+    onSubmit(search.search);
 
     return setSearch({ search: '' });
   };
@@ -83,22 +77,21 @@ const SearchBar = ({
 
   return (
     <header className={s.header}>
-      <Toaster />
       <div
-        className={anim ? s.boom : s.isClick}
+        className={animation ? s.boom : s.isClick}
         onAnimationEnd={handleAnimationOff}
       ></div>
       <button
         onClick={handleToggleBoxBtn}
-        className={close === true ? s.openBtn : s.isClick}
+        className={isClose === true ? s.openBtn : s.isClick}
       >
         Let's Start
       </button>
       <div
-        className={open === true ? s.container : s.isClick}
+        className={isOpen === true ? s.container : s.isClick}
         onAnimationEnd={handleInputOn}
       >
-        {input === true && (
+        {isInput === true && (
           <form id="test" onSubmit={handleFormSubmit} className={s.headerForm}>
             <input
               type="text"

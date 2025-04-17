@@ -14,7 +14,6 @@ const handleGetPhotos = async (query, page) => {
       },
     }
   );
-  console.log(selectedPhotos.data);
 
   return selectedPhotos.data;
 };
